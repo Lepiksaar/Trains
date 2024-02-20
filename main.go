@@ -98,6 +98,7 @@ func addConnection(line string, stations []Station, connections RailMap) RailMap
 		//optionally quit with error
 		return connections
 	}
+	//possibly check here for redundant or reverse connections
 	connections.Connections[stop1] = append(connections.Connections[stop1], stop2)
 	connections.Connections[stop2] = append(connections.Connections[stop2], stop1)
 	return connections
