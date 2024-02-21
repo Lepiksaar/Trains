@@ -142,9 +142,9 @@ func main() {
 	fmt.Println(stations)
 	fmt.Println("connections:")
 	for station, lines := range connections.Connections {
-		fmt.Println(*&station.Name)
+		fmt.Println(station.Name)
 		for _, stops := range lines {
-			fmt.Println("\t", *&stops.Name)
+			fmt.Println("\t", stops.Name)
 		}
 	}
 }
