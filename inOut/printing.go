@@ -1,69 +1,43 @@
-package inout
+package inOut
+
+import "fmt"
 
 func Printout(tracks [][]string, numTrains int) {
-
-}
-
-package main
-
-import (
-	"fmt"
-	"your_package/structs" // Replace with your actual package path
-)
-
-// Station represents a station in the graph.
-type Station struct {
-	Name        string
-	Visited     bool
-	Connections []*Station
-}
-
-// FindAllRoutes finds all routes from start to end station.
-func FindAllRoutes(mainMap map[string]*Station, start, end string) [][]string {
-	allRoutes := [][]string{}
-	visited := make(map[string]bool)
-	var currentRoute []string
-	dfsFindRoutes(mainMap, visited, &allRoutes, currentRoute, start, end)
-	return allRoutes
-}
-
-// dfsFindRoutes is a recursive helper function for FindAllRoutes.
-func dfsFindRoutes(mainMap map[string]*Station, visited map[string]bool, allRoutes *[][]string, currentRoute []string, current, end string) {
-	if visited[current] {
-		return // Avoid revisiting
-	}
-	if current == end {
-		// End station reached, add route to allRoutes
-		route := append([]string(nil), currentRoute...) // Make a copy of currentRoute
-		route = append(route, current)                  // Add end station
-		*allRoutes = append(*allRoutes, route)
-		return
-	}
-	// Mark the current station as visited
-	visited[current] = true
-	currentRoute = append(currentRoute, current) // Add current station to the route
-
-	// Explore each connection recursively
-	for _, station := range mainMap[current].Connections {
-		if !visited[station.Name] {
-			dfsFindRoutes(mainMap, visited, allRoutes, currentRoute, station.Name, end)
+	// arrange tracks from longest to shortest
+	currentTrain := 1
+	numberOftracks := len(tracks)
+	fmt.Println(numberOftracks)
+	for numTrains >= currentTrain {
+		for i := len(tracks) - 1; i >= 0; {
+			if len(tracks[i])-len(tracks[0]) <= numTrains-currentTrain-len(tracks[0])+1 {
+				fmt.Printf("T%v-%v ", currentTrain, tracks[i][1])
+				currentTrain++
+				i--
+				if numTrains <= currentTrain {
+					break
+				}
+			} else {
+				fmt.Printf("T%v-%v", currentTrain, tracks[0][1])
+				currentTrain++
+				i--
+				if numTrains <= currentTrain {
+					break
+				}
+			}
 		}
+		fmt.Println()
+		//turn starts
+		//check if longest route beats the shortest route+trains left.
+
+		//send train that way.give info train is in first stop
+		//no --- continue
+		//... check other n-routes if they beat like first
+		//send train that way. give info train is in first stop
+		//no--- continue
+		// send train to shortest route
+		//if first turn end turn. give info train is in first stop
+		// no trains to send end loop
 	}
-	// Unmark the current station as visited before backtracking
-	visited[current] = false
-}
+	//if first turn end turn
 
-func main() {
-	stations := make(map[string]*Station)
-	// Populate your stations map with Station structs
-
-	// Example usage of FindAllRoutes
-	start := "a" // Replace with your actual start station name
-	end := "b"   // Replace with your actual end station name
-	allRoutes := FindAllRoutes(stations, start, end)
-
-	fmt.Println("All possible routes from", start, "to", end, ":")
-	for _, route := range allRoutes {
-		fmt.Println(route)
-	}
 }

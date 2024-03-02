@@ -5,7 +5,66 @@ import (
 	"stations/structs"
 )
 
-// here we map the distances with the reference of beginning point.
+// function to find all routes to end route
+func FindAllRoutes(mainMap map[string]*structs.Station, start, end string) [][]string {
+	allRoutes := [][]string{}
+	// This is a good and fast way to check, if node is visited. Yay for maps
+	visited := make(map[string]bool)
+	var currentRoute []string
+	//dfs stands for depth-first search. it is good for finding all routes for better info: https://en.wikipedia.org/wiki/Depth-first_search
+	dfs(mainMap, visited, &allRoutes, currentRoute, start, end)
+	if len(allRoutes) == 0 {
+		fmt.Println("..... No routes found:")
+	} else {
+		fmt.Println("..... All non overlapping routes found:\n", allRoutes)
+	}
+	return allRoutes
+}
+
+// problem with dfs is it does not protect from loops. If there are any, we need to write some protection to it
+func dfs(mainMap map[string]*structs.Station, visited map[string]bool, allRoutes *[][]string, currentRoute []string, current, end string) {
+	// check if we reached end for recursion
+	if current == end {
+		// End station reached, add route to allRoutes
+		route := append(currentRoute, current) // Add end station
+		*allRoutes = append(*allRoutes, route)
+		return
+	}
+
+	// Hope that this helps against cycles
+	if visited[current] {
+		return // Avoid cycles
+	}
+
+	// Mark the current station as visited
+	visited[current] = true
+	// Add current station to the route
+	currentRoute = append(currentRoute, current)
+
+	// Explore each connection recursively. this is where the tree brances.
+	//we go through as many times as there are brances. that we have not visited
+	for _, station := range mainMap[current].Connections {
+		if !visited[station.Name] {
+			// Make a copy of the route for the recursive call
+			// had some problem here. using array because faster and my friend chat recommended it.
+			newRoute := make([]string, len(currentRoute))
+			copy(newRoute, currentRoute)
+			dfs(mainMap, visited, allRoutes, newRoute, station.Name, end)
+		}
+	}
+
+	// Unmark the current station as visited before backtracking
+	visited[current] = false
+}
+
+/*
+*************************************************************************'
+This is a older version with dijkstra. but there is a small problem with it.
+dijkstra is what is called a greedy algorithm. it wants to find the shortest route to end
+but in this exercise we need to find many routes. so using Depth-First Search might be better.
+*********************************************************************************
+
+
 func Createmap(mainMap map[string]*structs.Station, start string, end string) [][]string {
 	unvisitStation, nextStation := []string{}, []string{}
 	exit := true
@@ -113,3 +172,4 @@ func findShort(mainMap map[string]*structs.Station, start string, end string) []
 
 	return mainroute
 }
+*/

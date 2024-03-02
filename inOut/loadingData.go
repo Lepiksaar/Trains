@@ -1,11 +1,10 @@
-package inout
+package inOut
 
 import (
 	"bufio"
 	"fmt"
 	"os"
 	"stations/structs"
-	"strconv"
 	"strings"
 )
 
@@ -37,13 +36,12 @@ func FillStruct(filePath string) map[string]*structs.Station {
 			// we run the function to recieve required struct
 			tempStation := makeStation(line)
 			// we add the required struct to a map
-			//the struct also contains the name of station as does map
-			//probablly dont need it but added it just in case
 			mainStations[tempStation.Name] = &tempStation
 		} else {
 			addConnection(line)
 		}
 	}
+	fmt.Println("\n..... Successfully loaded Stations and connections")
 	return mainStations
 }
 func makeStation(line string) structs.Station {
@@ -55,23 +53,26 @@ func makeStation(line string) structs.Station {
 	}
 	name := strings.TrimSpace(parts[0])
 
-	//removing whitespace and ignoring evrithing after #
-	uglyX := strings.TrimSpace(ignoreHash(&parts[1]))
-	uglyY := strings.TrimSpace(ignoreHash(&parts[2]))
-	//assigning cordinates
-	x, err1 := strconv.Atoi(uglyX)
-	y, err2 := strconv.Atoi(uglyY)
-	if err1 != nil || err2 != nil {
-		fmt.Println("Invalid Coordinates: " + name)
-		return structs.Station{}
-	}
+	/*
+		It seems we dont need coordinates
+
+		//removing whitespace and ignoring evrithing after #
+		uglyX := strings.TrimSpace(ignoreHash(&parts[1]))
+		uglyY := strings.TrimSpace(ignoreHash(&parts[2]))
+		//assigning cordinates
+		x, err1 := strconv.Atoi(uglyX)
+		y, err2 := strconv.Atoi(uglyY)
+		if err1 != nil || err2 != nil {
+			fmt.Println("Invalid Coordinates: " + name)
+			return structs.Station{}
+		} */
 	//we return the struct that we want to add to map
 	return structs.Station{
-		Name:     name,
-		X:        x,
-		Y:        y,
+		Name: name,
+		//X:        x, it seems we dont need it
+		//Y:        y, it seems we dont need it
 		Vistited: false,
-		Distance: 2147483647,
+		//Distance: 2147483647, needed it for dijkstra. dont need it anymore
 	}
 }
 
@@ -97,11 +98,9 @@ func addConnection(line string) {
 		return
 	}
 	// we add stations to struct.stations.connections
-	station.Connections = append(station.Connections, stop1)
-	mainStations[stop] = station
-	//biderictional movement
-	station1.Connections = append(station1.Connections, stop)
-	mainStations[stop1] = station1
+	station.Connections = append(station.Connections, station1)
+	//biderictional connections for roundabouts.
+	station1.Connections = append(station1.Connections, station)
 
 }
 

@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	inout "stations/inOut"
+	"stations/inOut"
 	"stations/logic"
 )
 
@@ -16,12 +16,9 @@ func main() {
 	flag.Parse()
 
 	//build our slice of stations and the map
-	stations := inout.FillStruct(*networkMap)
-	shortestRoutes := logic.Createmap(stations, *start, *end)
-	inout.Printout(shortestRoutes, *numTrains)
+	fmt.Printf("\nStart Station: %v  End Station: %v  Number of Trains: %v\n\n", *start, *end, *numTrains)
+	stations := inOut.FillStruct(*networkMap)
+	shortestRoutes := logic.FindAllRoutes(stations, *start, *end)
 
-	fmt.Printf("\nstart: %v  end: %v  numTrains: %v\n", *start, *end, *numTrains)
-	fmt.Println("stations: ")
-	fmt.Println(stations)
-	fmt.Println("this is shortest route", shortestRoutes)
+	inOut.Printout(shortestRoutes, *numTrains)
 }
