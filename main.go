@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	inout "stations/inOut"
+	"stations/logic"
 )
 
 func main() {
@@ -16,9 +17,10 @@ func main() {
 
 	//build our slice of stations and the map
 	stations := inout.FillStruct(*networkMap)
-	//shortestRoutes := logic.dijkstra(stations)
+	shortestRoutes := logic.Createmap(stations, *start, *end)
 
 	fmt.Printf("\nstart: %v  end: %v  numTrains: %v\n", *start, *end, *numTrains)
 	fmt.Println("stations: ")
 	fmt.Println(stations)
+	fmt.Println("this is shortest route", shortestRoutes)
 }

@@ -9,9 +9,10 @@ import (
 	"strings"
 )
 
-var mainStations = make(map[string]structs.Station)
+var mainStations = make(map[string]*structs.Station)
 
-func FillStruct(filePath string) map[string]structs.Station {
+// function that reads the info into a struct
+func FillStruct(filePath string) map[string]*structs.Station {
 
 	mapFile, err := os.Open(filePath)
 	if err != nil {
@@ -38,7 +39,7 @@ func FillStruct(filePath string) map[string]structs.Station {
 			// we add the required struct to a map
 			//the struct also contains the name of station as does map
 			//probablly dont need it but added it just in case
-			mainStations[tempStation.Name] = tempStation
+			mainStations[tempStation.Name] = &tempStation
 		} else {
 			addConnection(line)
 		}
