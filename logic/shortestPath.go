@@ -17,7 +17,6 @@ func Createmap(mainMap map[string]*structs.Station, start string, end string) []
 	unvisitStation = append(unvisitStation, currentStation.Connections...)
 
 	fmt.Println("------------>", mainMap[start])
-
 	for exit {
 		// we dont use distance. all nodes are at equal distance, so no need for distance calculations
 		distance++
@@ -47,6 +46,7 @@ func Createmap(mainMap map[string]*structs.Station, start string, end string) []
 			}
 		}
 		unvisitStation = nextStation
+		exit = false
 	}
 	mainRoute := findShort(mainMap, start, end)
 	return mainRoute
@@ -77,8 +77,9 @@ func findShort(mainMap map[string]*structs.Station, start string, end string) []
 				tempsStation = mainMap[compareStation.Name]
 				tempsStation.Vistited = false
 			}
-			// first endpoint when
+			// we check for the current struct connections
 			for _, station2 := range tempsStation.Connections {
+				// first endpoint when there is no connection to first(did not trigger first)
 				if first {
 					fmt.Println("Did not find this route. stuck at: ", tempsStation.Name)
 					tempRoute = []string{end}
@@ -86,18 +87,22 @@ func findShort(mainMap map[string]*structs.Station, start string, end string) []
 					break out
 				}
 				first = true
+				// if the struct has been allready checked or not reached in mapping, it is ignored
 				tempsStation2 := *mainMap[station2]
 				if !tempsStation2.Vistited || tempsStation2.Distance == 2147483647 {
 					continue
+					// second endpoint when start is reached
 				} else if mainMap[station2] == mainMap[start] {
 					tempRoute = append(tempRoute, tempsStation2.Name)
 					mainroute = append(mainroute, tempRoute)
 					tempRoute = []string{end}
 					first = false
 					break out
+					// when find first node assign to it
 				} else if first {
 					compareStation = tempsStation2
 					first = false
+					// when other node in the logic has shorter distance
 				} else if tempsStation2.Distance < compareStation.Distance {
 					compareStation = tempsStation2
 				}

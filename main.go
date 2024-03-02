@@ -18,6 +18,7 @@ func main() {
 	//build our slice of stations and the map
 	stations := inout.FillStruct(*networkMap)
 	shortestRoutes := logic.Createmap(stations, *start, *end)
+	inout.Printout(shortestRoutes, *numTrains)
 
 	fmt.Printf("\nstart: %v  end: %v  numTrains: %v\n", *start, *end, *numTrains)
 	fmt.Println("stations: ")
