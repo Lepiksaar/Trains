@@ -19,6 +19,5 @@ func main() {
 	fmt.Printf("\nStart Station: %v  End Station: %v  Number of Trains: %v\n\n", *start, *end, *numTrains)
 	stations := inOut.FillStruct(*networkMap)
 	shortestRoutes := logic.FindAllRoutes(stations, *start, *end)
-
 	inOut.Printout(shortestRoutes, *numTrains)
 }
