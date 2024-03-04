@@ -105,10 +105,10 @@ func addConnection(line string) {
 }
 
 // small helper function to remove after #
-func ignoreHash(input *string) string {
+/* func ignoreHash(input *string) string {
 	parts := strings.Split(*input, "#")
 	if len(parts) > 0 {
 		return parts[0]
 	}
 	return *input
-}
+} */

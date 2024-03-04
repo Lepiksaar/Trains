@@ -8,3 +8,7 @@ type Station struct {
 	Vistited    bool
 	Connections []*Station // points to a connected stations
 }
+type Track struct {
+	Name  []string
+	Train []int
+}
