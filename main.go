@@ -16,7 +16,7 @@ func main() {
 	flag.Parse()
 
 	//build our slice of stations and the map
-	fmt.Printf("\nStart Station: %v  End Station: %v  Number of Trains: %v\n\n", *start, *end, *numTrains)
+	fmt.Printf("\nStart Station: %v  End Station: %v  Number of Trains: %v", *start, *end, *numTrains)
 	stations := inOut.FillStruct(*networkMap)
 	shortestRoutes := logic.FindAllRoutes(stations, *start, *end)
 	inOut.Printout(shortestRoutes, *numTrains)

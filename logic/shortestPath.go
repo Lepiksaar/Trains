@@ -31,7 +31,7 @@ func dfs(mainMap map[string]*structs.Station, visited map[string]bool, allRoutes
 		return
 	}
 
-	// Hope that this helps against cycles
+	// Hope that this helps against loops
 	if visited[current] {
 		return // Avoid cycles
 	}
@@ -46,7 +46,7 @@ func dfs(mainMap map[string]*structs.Station, visited map[string]bool, allRoutes
 	for _, station := range mainMap[current].Connections {
 		if !visited[station.Name] {
 			// Make a copy of the route for the recursive call
-			// had some problem here. using array because faster and my friend chat recommended it.
+			// had some problem here. using array because faster and friend chat recommended it.
 			newRoute := make([]string, len(currentRoute))
 			copy(newRoute, currentRoute)
 			dfs(mainMap, visited, allRoutes, newRoute, station.Name, end)

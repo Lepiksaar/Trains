@@ -15,37 +15,43 @@ func Printout(tracks [][]string, numTrains int) {
 	trackSlice := loadNames(tracks)
 	printStr := []string{}
 	for end {
-		// because tracks are set from shortest to longest, we start from the longest and check, if we can
-		for i := len(tracks) - 1; i >= 0; {
-			//our formula to see if it is good idea to send it from long way
+		// logic that sets start points to each routes.
+		//if it is good idea to send from there it appends train number as struct.train location 0
+		for i := len(tracks) - 1; i >= 0; i-- {
+			//our formula to see if it is good idea to send it from long way starting from longest
 			if len(tracks[i])-len(tracks[0]) < numTrains-currentTrain+1 {
 				tempTrack := &trackSlice[i]
 				tempTrack.Train = append([]int{currentTrain}, tempTrack.Train...)
+				tempTrack.InUse = true
 				currentTrain++
-				i--
 				if numTrains < currentTrain {
 					break
 				}
-			} else {
+				//if none of the first ones match we give the train to shortest one.
+			} else if i == 0 {
 				tempTrack := &trackSlice[0]
 				tempTrack.Train = append([]int{currentTrain}, tempTrack.Train...)
+				tempTrack.InUse = true
 				currentTrain++
-				i--
 				break
 			}
 		}
-		for last, printTrack := range trackSlice {
-			// because we started checking from longest, the algo also prefers longer routes.
-			//so if time is same, we have to continue from our first route
-			if numTrains < currentTrain && last == 0 {
+		for i := 0; i < len(trackSlice); i++ {
+			// Directly access each printTrack by index to modify the original slice
+			printTrack := &trackSlice[i]
+
+			if !printTrack.InUse {
 				continue
 			}
-			// when there is only one train. Or some tracks are not used, then it skipps them also
 			if printTrack.Train == nil {
 				continue
 			}
-			// we append the train and what route it takes(first stop) into a []string
+
+			// Append the train and what route it takes (first stop) into printStr
 			printStr = append(printStr, "T"+strconv.Itoa(printTrack.Train[0])+"-"+printTrack.Name[0])
+
+			// Set InUse to false. This change will now be reflected in trackSlice
+			printTrack.InUse = false
 		}
 		moveList(&printStr, &trackSlice)
 		if currentTrain > numTrains {
@@ -68,6 +74,7 @@ func loadNames(matrix [][]string) []structs.Track {
 	return tracks
 }
 
+// just a double loop function that moves all stations 1 further
 func moveList(list *[]string, name *[]structs.Track) {
 	newList := make([]string, len(*list))
 	b := *list
@@ -98,6 +105,7 @@ func moveList(list *[]string, name *[]structs.Track) {
 	}
 }
 
+// function that actually prints the movement. removing emty spaces
 func actualPrinting(b []string) {
 	//sorting to smallest first
 	sort.Slice(b, func(i, j int) bool {
