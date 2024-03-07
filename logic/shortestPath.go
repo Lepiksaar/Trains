@@ -2,6 +2,8 @@ package logic
 
 import (
 	"fmt"
+	"os"
+	"sort"
 	"stations/structs"
 )
 
@@ -14,8 +16,10 @@ func FindAllRoutes(mainMap map[string]*structs.Station, start, end string) [][]s
 	//dfs stands for depth-first search. it is good for finding all routes for better info: https://en.wikipedia.org/wiki/Depth-first_search
 	dfs(mainMap, visited, &allRoutes, currentRoute, start, end)
 	if len(allRoutes) == 0 {
-		fmt.Println("..... No routes found:")
+		fmt.Fprintf(os.Stderr, "..... No routes found from %v, to %v: \n", start, end)
+		os.Exit(0)
 	} else {
+		allRoutes = removeAndOrder(allRoutes)
 		fmt.Println("..... All non overlapping routes found:\n", allRoutes)
 	}
 	return allRoutes
@@ -55,6 +59,38 @@ func dfs(mainMap map[string]*structs.Station, visited map[string]bool, allRoutes
 
 	// Unmark the current station as visited before backtracking
 	visited[current] = false
+}
+
+func removeAndOrder(matrix [][]string) [][]string {
+	newList := [][]string{}
+	for _, a := range matrix {
+		unique := true
+		if newList == nil {
+			newList = append(newList, a)
+		} else {
+		out:
+			for i := 1; i < len(a)-1; i++ {
+				for j, b := range newList {
+					for _, c := range b {
+						if a[i] == c {
+							unique = false
+							if len(b) > len(a) {
+								newList[j] = a
+							}
+							break out
+						}
+					}
+				}
+			}
+		}
+		if unique {
+			newList = append(newList, a)
+		}
+	}
+	sort.Slice(newList, func(i, j int) bool {
+		return len(newList[i]) < len(newList[j])
+	})
+	return newList
 }
 
 /*
