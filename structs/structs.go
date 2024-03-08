@@ -10,9 +10,12 @@ type Station struct {
 	Connections []*Station // points to a connected stations
 }
 
+/* do not use in the new and faster printing
+
 // for printing functions
 type Track struct {
 	Name  []string
 	Train []int
 	InUse bool // need it to check if longer routes are used
 }
+*/

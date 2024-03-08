@@ -3,12 +3,88 @@ package inOut
 import (
 	"fmt"
 	"sort"
-	"stations/structs"
 	"strconv"
-	"strings"
 )
 
 func Printout(tracks [][]string, numTrains int) {
+	// tracks are arranged from shortest to longest
+	end := true
+	currentTrain := 1
+	train := []map[int][]string{}
+	printList := []string{}
+	for end {
+		// logic that sets start points to each routes.
+		//if it is good idea to send from there it appends train number as struct.train location 0
+		for i := len(tracks) - 1; i >= 0; i-- {
+			//our formula to see if it is good idea to send it from long way starting from longest
+			if len(tracks[i])-len(tracks[0]) < numTrains-currentTrain+1 {
+				modifiedTrack := tracks[i][1:]
+				tempMap := map[int][]string{currentTrain: modifiedTrack}
+				train = append(train, tempMap)
+				currentTrain++
+				if numTrains < currentTrain {
+					break
+				}
+				//if none of the first ones match we give the train to shortest one.
+			} else if i == 0 && numTrains >= currentTrain {
+				modifiedTrack := tracks[i][1:]
+				tempMap := map[int][]string{currentTrain: modifiedTrack}
+				train = append(train, tempMap)
+				currentTrain++
+				break
+			}
+			if currentTrain > numTrains {
+				end = false
+			}
+		}
+		addStrList(&printList, &train)
+		nicePrint(&printList)
+	}
+	// need to add this for last time, when new trains are not sent
+	for len(train) > 0 {
+		addStrList(&printList, &train)
+		nicePrint(&printList)
+	}
+}
+func nicePrint(list *[]string) {
+	newList := *list
+
+	sort.Slice(newList, func(i, j int) bool {
+		return newList[i] < newList[j]
+	})
+
+	for _, train := range newList {
+		fmt.Print(train + " ")
+	}
+	*list = nil
+	fmt.Println()
+}
+func addStrList(list *[]string, trains *[]map[int][]string) {
+	filteredTrains := []map[int][]string{}
+
+	for _, trainMap := range *trains {
+		for trainNumber, stations := range trainMap {
+			if len(stations) == 0 {
+				continue
+			}
+			if len(stations) > 0 {
+				// Construct the string with the train number and the first station name.
+				trainStr := "T" + strconv.Itoa(trainNumber) + "-" + stations[0]
+				updatedTrainMap := map[int][]string{
+					trainNumber: stations[1:], // Slice off the first station
+				}
+				filteredTrains = append(filteredTrains, updatedTrainMap)
+				// Append the constructed string to the list.
+				*list = append(*list, trainStr)
+			}
+		}
+	}
+	*trains = filteredTrains
+}
+
+//**********************************************older version**************************************
+
+/* func Printout(tracks [][]string, numTrains int) {
 	// tracks are arranged from shortest to longest
 	end := true
 	currentTrain := 1
@@ -46,7 +122,7 @@ func Printout(tracks [][]string, numTrains int) {
 			if printTrack.Train == nil {
 				continue
 			}
-
+			fmt.Println(printTrack)
 			// Append the train and what route it takes (first stop) into printStr
 			printStr = append(printStr, "T"+strconv.Itoa(printTrack.Train[0])+"-"+printTrack.Name[0])
 
@@ -122,3 +198,4 @@ func actualPrinting(b []string) {
 	fmt.Println()
 
 }
+*/

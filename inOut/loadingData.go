@@ -105,7 +105,7 @@ func makeStation(line string, nuStat *int) structs.Station {
 	//assigning cordinates
 	x, err1 := strconv.Atoi(uglyX)
 	y, err2 := strconv.Atoi(uglyY)
-	if err1 != nil || err2 != nil {
+	if err1 != nil || err2 != nil || x < 0 || y < 0 {
 		fmt.Fprintf(os.Stderr, "Invalid Coordinates: %v ", name)
 		return structs.Station{}
 	}
@@ -149,6 +149,13 @@ func addConnection(line string) {
 	} else if !ok1 {
 		fmt.Fprintf(os.Stderr, "Failure to add connection, station %v does not exist on line: %v\n", stop1, line)
 		return
+	}
+	// we add stations to struct.stations.connections
+	for _, i := range station.Connections {
+		if i == station1 {
+			fmt.Fprintf(os.Stderr, "duplicate connection found between %v and: %v\n", station1.Name, station.Name)
+			return
+		}
 	}
 	// we add stations to struct.stations.connections
 	station.Connections = append(station.Connections, station1)
