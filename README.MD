@@ -1,3 +1,15 @@
+# This program is still works in progress.
+
+the program works with small maps. just not very well optimized
+
+- there is a logic fault in finding the shortest path.(with bigger number of stations it starts looping)
+- the mapping logic only prefers shortest path first(it does not count if it can choose two bit longer ones to get there with less steps)
+- Optimisation: Reading and Printing could be done async to increase performance. also want to look over hash maps. can be optimized there as well.
+- errors need to be reorganized(right now they are just near the functions, it makes more readable if we string them as a error package)
+- a lot of small improvements to make the code more readable.
+
+
+
 # Railway Station Routing Program Documentation
 
 Welcome to the Railway Station Routing Program! This program is designed to process a network of railway stations and find the optimal routes for a given number of trains from a starting station to a destination station. Below is the documentation outlining the structure and functionality of the program.
