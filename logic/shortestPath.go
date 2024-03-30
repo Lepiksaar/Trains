@@ -63,6 +63,8 @@ func dfs(mainMap map[string]*structs.Station, visited map[string]bool, allRoutes
 
 func removeAndOrder(matrix [][]string) [][]string {
 	newList := [][]string{}
+	//newList2 := [][]string{}
+	//tempList := [][]string{}
 	for _, a := range matrix {
 		unique := true
 		if newList == nil {
@@ -87,6 +89,7 @@ func removeAndOrder(matrix [][]string) [][]string {
 			newList = append(newList, a)
 		}
 	}
+	// this is for when there are more routes, but all routes are longer
 	sort.Slice(newList, func(i, j int) bool {
 		return len(newList[i]) < len(newList[j])
 	})

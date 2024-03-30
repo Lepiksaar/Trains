@@ -10,7 +10,7 @@ type Station struct {
 	Connections []*Station // points to a connected stations
 }
 
-/* do not use in the new and faster printing
+/* did not use in the new and faster printing
 
 // for printing functions
 type Track struct {

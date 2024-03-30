@@ -14,7 +14,7 @@ func Printout(tracks [][]string, numTrains int) {
 	printList := []string{}
 	for end {
 		// logic that sets start points to each routes.
-		//if it is good idea to send from there it appends train number as struct.train location 0
+		//if it is good idea to send from there it makes the train with [currentTrain][]list of train stations
 		for i := len(tracks) - 1; i >= 0; i-- {
 			//our formula to see if it is good idea to send it from long way starting from longest
 			if len(tracks[i])-len(tracks[0]) < numTrains-currentTrain+1 {
@@ -37,10 +37,12 @@ func Printout(tracks [][]string, numTrains int) {
 				end = false
 			}
 		}
+		// we write a all trains that are still on track to printlist from trainmap and delete the station where we are
 		addStrList(&printList, &train)
+		// because of maps, we need to sort and print them out correctly
 		nicePrint(&printList)
 	}
-	// need to add this for last time, when new trains are not sent
+	// need to add this for last time, when new trains are not sent. all trains that are on the way reach destination.
 	for len(train) > 0 {
 		addStrList(&printList, &train)
 		nicePrint(&printList)

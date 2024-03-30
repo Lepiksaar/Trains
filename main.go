@@ -12,8 +12,8 @@ import (
 func main() {
 	//assess arguments
 	networkMap := flag.String("networkMap", "test.txt", "path/Name for Network Map. default: test.txt")
-	start := flag.String("start", "waterloo", "name of starting station. default: waterloo")
-	end := flag.String("end", "st_pancras", "name of ending station. default: st_pancras")
+	start := flag.String("start", "jungle", "name of starting station. default: waterloo")
+	end := flag.String("end", "desert", "name of ending station. default: st_pancras")
 	numTrains := flag.Int("numTrains", 1, "number of trains. default: 1")
 	flag.Parse()
 
@@ -33,11 +33,11 @@ func main() {
 	fmt.Printf("\nStart Station: %v  End Station: %v  Number of Trains: %v \n", *start, *end, *numTrains)
 	stations := inOut.FillStruct(*networkMap, *start, *end)
 	findTime := time.Since(startt)
+	fmt.Printf("time took loading drom file %s \n", findTime)
 	shortestRoutes := logic.FindAllRoutes(stations, *start, *end)
 	findRoutes := time.Since(startt)
 	inOut.Printout(shortestRoutes, *numTrains)
 	elapsed := time.Since(startt)
-	fmt.Printf("time took loading drom file %s \n", findTime)
 	fmt.Printf("time took finding path %s \n", findRoutes-findTime)
-	fmt.Printf("time took printing %s", elapsed-findRoutes)
+	fmt.Printf("time took printing %s\n", elapsed-findRoutes)
 }
